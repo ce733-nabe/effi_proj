@@ -9,9 +9,9 @@ import time
 from django.conf import settings
 
 def pred(img_path):
-    #model = tf.keras.applications.EfficientNetB0(weights='imagenet')
+    model = tf.keras.applications.EfficientNetB0(weights='imagenet')
     #model.save('./test_model')
-    model = tf.keras.models.load_model(settings.STATIC_ROOT + '/test_model')
+    #model = tf.keras.models.load_model(settings.STATIC_ROOT + '/test_model')
     width = 224
     height = 224
 
