@@ -1,0 +1,24 @@
+{% extends 'effi_app/base.html' %}
+
+{% block content %}
+<table>
+<form action="{% url 'effi_app:single' %}" method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form }}
+    <tr><td></td><td><input type="submit" class="btn btn-primary btn-sm" value="推論開始" /></td></tr>
+</form>
+</table>
+
+<div class="div1">
+{% for item in effidata %}
+    {% if not item in 'none' %}
+    <tr>
+        <p>日付：{{ item.pub_date }}</p>
+        <td><img src="{{ item.photo_image.url }}" width="300" height="300"/></td>
+        <p>推論結果：{{ item.pred_result }}</p>
+    <tr>
+    {% endif %}
+{% endfor %}
+</div>
+
+{% endblock %}

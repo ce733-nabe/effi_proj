@@ -12,6 +12,7 @@ def pred(img_path):
     model = tf.keras.applications.EfficientNetB0(weights='imagenet')
     #model.save('./test_model')
     #model = tf.keras.models.load_model(settings.STATIC_ROOT + '/test_model')
+    
     width = 224
     height = 224
 
@@ -28,3 +29,5 @@ def pred(img_path):
     print(decode_predictions(y, top=1))
 
     return decode_predictions(y, top=1)
+
+

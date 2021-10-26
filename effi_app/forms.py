@@ -1,12 +1,18 @@
 from django import forms
-from .models import PhotoImage
+from .models import EfficientData
 #from PIL import Image
 
 
-class PhotoImageForm(forms.ModelForm):
+class SingleForm(forms.ModelForm):
     class Meta:
-        model = PhotoImage
+        model = EfficientData
         fields = ('photo_image',)
+
+
+class MultiForm(forms.Form):
+    photo_image = forms.ImageField(widget=forms.ClearableFileInput(attrs={'multiple': True}))
+    
+    
 
         
 

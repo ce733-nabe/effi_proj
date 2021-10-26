@@ -2,21 +2,22 @@
 
 {% block content %}
 <table>
-<form action="{% url 'effi_app:index' %}" method="POST" enctype="multipart/form-data">
+<form action="{% url 'effi_app:multi' %}" method="POST" enctype="multipart/form-data">
    {% csrf_token %}
    {{ form }}
    <tr><td></td><td><input type="submit" class="btn btn-primary btn-sm" value="推論開始" /></td></tr>
 </form>
 </table>
 
-{% for item in pred_image %}
+<div class="div1">
+{% for item in effidata %}
     {% if not item in 'none' %}
     <tr>
-        <td><img src="{{ item.photo_image.url }}" width="100" height="100"/></td>
+        <p>日付：{{ item.pub_date }}</p>
+        <td><img src="{{ item.photo_image.url }}" width="300" height="300"/></td>
+        <p>推論結果：{{ item.pred_result }}</p>
     <tr>
     {% endif %}
 {% endfor %}
-
-<p>推論結果：{{pred}}</p>
-
+</div>
 {% endblock %}
