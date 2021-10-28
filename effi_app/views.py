@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.views.generic import TemplateView
 from .forms import SingleForm ,MultiForm
-from effi_app.main import pred
+from effi_app.main import pred, Pred
 from .models import EfficientData
 from django.conf import settings
 
@@ -19,6 +19,7 @@ class SingleView(TemplateView):
     def post(self, req):
         if req.method == 'POST':
             form = SingleForm(req.POST, req.FILES)
+            pred = Pred()
 
             if form.is_valid():
                 effidata = EfficientData()
@@ -26,7 +27,8 @@ class SingleView(TemplateView):
                 effidata.photo_image = form.cleaned_data['photo_image']
                 effidata.save()
 
-                effidata.pred_result =pred(settings.MEDIA_ROOT + '/' + str(effidata.photo_image))
+                #effidata.pred_result = pred(settings.MEDIA_ROOT + '/' + str(effidata.photo_image))
+                effidata.pred_result =pred.pred(settings.MEDIA_ROOT + '/' + str(effidata.photo_image))
                 effidata.save()
                 
                 self.params['effidata'] = EfficientData.objects.all().order_by('-id')[:1]
@@ -49,15 +51,18 @@ class MultiView(TemplateView):
     def post(self, req):
         if req.method == 'POST':
             form = MultiForm(req.POST, req.FILES)
+            pred = Pred()
             if form.is_valid():
                 cnt = 0
+                
                 for ff in req.FILES.getlist('photo_image'):
                     effidata = EfficientData()
-
+                    
                     effidata.photo_image = ff
                     effidata.save()
 
-                    effidata.pred_result = pred(settings.MEDIA_ROOT + '/' + str(effidata.photo_image))
+                    #effidata.pred_result = pred(settings.MEDIA_ROOT + '/' + str(effidata.photo_image))
+                    effidata.pred_result =pred.pred(settings.MEDIA_ROOT + '/' + str(effidata.photo_image))
                     effidata.save()
                     
                     cnt = cnt + 1
