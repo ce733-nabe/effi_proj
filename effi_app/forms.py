@@ -8,9 +8,10 @@ class SingleForm(forms.ModelForm):
         model = EfficientData
         fields = ('photo_image',)
 
-
+    
 class MultiForm(forms.Form):
     photo_image = forms.ImageField(widget=forms.ClearableFileInput(attrs={'multiple': True}))
+
     
     
 
