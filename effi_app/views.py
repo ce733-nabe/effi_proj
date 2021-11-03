@@ -7,6 +7,9 @@ from .models import EfficientData
 from django.conf import settings
 import time
 
+class IndexView(TemplateView):
+    template_name = 'effi_app/index.html'
+
 class SingleView(TemplateView):
 
     def __init__(self):

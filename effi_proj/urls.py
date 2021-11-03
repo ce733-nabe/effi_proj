@@ -10,6 +10,7 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('effi_app/', include('effi_app.urls')),
+    path('account/', include('allauth.urls')),
 ]
 
 if settings.DEBUG:
