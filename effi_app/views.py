@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.views.generic import TemplateView
 from .forms import SingleForm ,MultiForm
-from effi_app.main import pred, Pred, Preds, Effi_study
+from effi_app.main import pred, Pred, Preds, Effi_Pred, Effi_Train
 from .models import EfficientData
 from django.conf import settings
 import time
@@ -101,7 +101,7 @@ class MultiView(TemplateView):
         return render(req, 'effi_app/multi.html', self.params)
 
 
-class MultiView2(TemplateView):
+class EffiPredView(TemplateView):
 
     def __init__(self):
         print('------------init-----------')
@@ -111,7 +111,65 @@ class MultiView2(TemplateView):
 
     def get(self, req):
         print('------------get-----------')
-        return render(req, 'effi_app/multi2.html', self.params)
+        return render(req, 'effi_app/effipred.html', self.params)
+
+    def post(self, req):
+        print('------------post-----------')
+        start = time.time()
+
+        if req.method == 'POST':
+            form = MultiForm(req.POST, req.FILES)
+            #pred = Pred()
+
+            if form.is_valid():
+                cnt = 0
+                pimg_box = []
+                pimg_box2 = []
+    
+                for ff in req.FILES.getlist('photo_image'):
+                    pimg_box.append(EfficientData(photo_image=ff, pred_result=''))
+                    cnt = cnt + 1
+                EfficientData.objects.bulk_create(pimg_box)
+                
+
+                pimg_box2 = []
+                iiis = EfficientData.objects.all().order_by('-id')[:cnt]
+                for iii in iiis:
+                    pimg_box2.append(settings.MEDIA_ROOT + '/' + str(iii.photo_image))
+                preds = Effi_Pred(filenames=pimg_box2, batch_size=20).effi_pred()
+
+
+                cnt2 = 0
+                iiis = EfficientData.objects.all().order_by('-id')[:cnt]
+                for iii in iiis:
+                    iii.pred_result = str(preds[cnt2])
+                    cnt2 = cnt2 + 1
+                EfficientData.objects.bulk_update(iiis, fields=["pred_result"])
+
+                self.params['effidata'] = EfficientData.objects.all().order_by('-id')[:cnt]
+                             
+        else:
+            form = MultiForm()
+
+        self.params[form] = form
+
+        elapsed_time = time.time() - start
+        print("elapsed_time:{0}".format(elapsed_time) + "[sec]")
+
+        return render(req, 'effi_app/effipred.html', self.params)
+
+
+class EffiTrainView(TemplateView):
+
+    def __init__(self):
+        print('------------init-----------')
+        self.params={'effidata': 'none',
+                    'form': MultiForm(),
+                    }
+
+    def get(self, req):
+        print('------------get-----------')
+        return render(req, 'effi_app/effitrain.html', self.params)
 
     def post(self, req):
         print('------------post-----------')
@@ -137,7 +195,7 @@ class MultiView2(TemplateView):
                 for iii in iiis:
                     pimg_box2.append(settings.MEDIA_ROOT + '/' + str(iii.photo_image))
                 #preds = Preds(filenames=pimg_box2, batch_size=20).preds()
-                Effi_study(filenames=pimg_box2).effi_train()
+                score = Effi_Train(filenames=pimg_box2).effi_train()
 
 
                 #cnt2 = 0
@@ -147,8 +205,9 @@ class MultiView2(TemplateView):
                 #    cnt2 = cnt2 + 1
                 #EfficientData.objects.bulk_update(iiis, fields=["pred_result"])
 
-                self.params['effidata'] = EfficientData.objects.all().order_by('-id')[:cnt]
-                             
+                #self.params['effidata'] = EfficientData.objects.all().order_by('-id')[:cnt]
+
+                self.params['effidata'] = score           
         else:
             form = MultiForm()
 
@@ -157,7 +216,7 @@ class MultiView2(TemplateView):
         elapsed_time = time.time() - start
         print("elapsed_time:{0}".format(elapsed_time) + "[sec]")
 
-        return render(req, 'effi_app/multi2.html', self.params)
+        return render(req, 'effi_app/effitrain.html', self.params)
 
     
     

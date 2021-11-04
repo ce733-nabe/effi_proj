@@ -72,8 +72,8 @@ class Preds():
         self.imgs = self.imgs_load(filenames)
  
         self.batch_size = batch_size
-        #self.model = tf.keras.applications.EfficientNetB0(weights='imagenet')
-        self.model = tf.keras.models.load_model(settings.STATIC_ROOT + '/my_model')
+        self.model = tf.keras.applications.EfficientNetB0(weights='imagenet')
+        #self.model = tf.keras.models.load_model(settings.STATIC_ROOT + '/my_model')
         
     def __del__(self):
         print ('Preds デストラクタが呼び出されました!')
@@ -108,6 +108,62 @@ class Preds():
             X = self.imgs[start_idx:start_idx + effective_batch_size]
 
             y = self.model.predict(X)
+            print(decode_predictions(y, top=1))
+            mbox.extend(decode_predictions(y, top=1))
+
+            #class_names = ["bush", "obama", "tramp"]
+            #pred_labels = np.argmax(y, axis=-1)
+            #print(pred_labels)  # [2 0 0 2 2 2 4 2 3 3]
+            #pred_label_names = [class_names[x] for x in pred_labels]
+            #print(pred_label_names)
+            #mbox.extend(pred_label_names)
+            
+        return mbox
+#Preds(img_path='./gazou_sample/',batch_size = 4).preds()
+
+
+class Effi_Pred():
+    def __init__(self,filenames, batch_size):
+        print('Effi_Pred コンストラクタが呼び出されました！')
+        self.imgs = self.imgs_load(filenames)
+ 
+        self.batch_size = batch_size
+        #self.model = tf.keras.applications.EfficientNetB0(weights='imagenet')
+        self.model = tf.keras.models.load_model(settings.STATIC_ROOT + '/my_model')
+        
+    def __del__(self):
+        print ('Effi_Pred デストラクタが呼び出されました!')
+
+    #def imgs_load(self,img_path):
+    def imgs_load(self,filenames):
+        #filenames = glob.glob(img_path + '*.jpg')
+    
+        X = []
+        
+        for filename in filenames:
+            img = img_to_array(load_img(filename, target_size=(224 ,224)))
+            #img = img[:,:,::-1]
+            X.append(img)
+            
+        X = np.asarray(X)
+        
+        print('X.shape: ', X.shape)
+        
+        return X
+    
+    def effi_pred(self):
+        batch_num = 0
+        mbox= []
+        for start_idx in range(0, self.imgs.shape[0], self.batch_size):
+            batch_num += 1
+            print("Validating batch {:}".format(batch_num))
+
+            end_idx = min(start_idx + self.batch_size, self.imgs.shape[0])
+            effective_batch_size = end_idx - start_idx
+
+            X = self.imgs[start_idx:start_idx + effective_batch_size]
+
+            y = self.model.predict(X)
             #print(decode_predictions(y, top=1))
             #mbox.extend(decode_predictions(y, top=1))
 
@@ -121,14 +177,13 @@ class Preds():
         return mbox
 #Preds(img_path='./gazou_sample/',batch_size = 4).preds()
 
-
-class Effi_study():
+class Effi_Train():
     def __init__(self,filenames):
-        print('Effi_study コンストラクタが呼び出されました！')
+        print('Effi_train コンストラクタが呼び出されました！')
         self.filenames = filenames
 
     def __del__(self):
-        print ('Effi_study デストラクタが呼び出されました!')
+        print ('Effi_train デストラクタが呼び出されました!')
 	
     def imgs_load(self,filenames):
         X=[]
@@ -166,7 +221,7 @@ class Effi_study():
 
         # 学習
         model.compile(optimizer='SGD', loss='categorical_crossentropy', metrics=['accuracy'])
-        model.fit(X_train_processed, y_train_categorical,epochs=100,batch_size=4) #epoch数とか諸々のものは一般のkerasと同様ここでオプション追加する
+        model.fit(X_train_processed, y_train_categorical,epochs=10,batch_size=4) #epoch数とか諸々のものは一般のkerasと同様ここでオプション追加する
         model.save(settings.STATIC_ROOT + '/my_model')
 
         #モデル評価
@@ -175,6 +230,8 @@ class Effi_study():
 
         print("loss:", score[0])
         print("accuracy:", score[1])
+
+        return score
         
 #Effi_study().effi_train()
 
