@@ -6,6 +6,7 @@ urlpatterns = [
     path('index/', views.IndexView.as_view(), name='index'),
     path('single/', views.SingleView.as_view(), name='single'),
     path('multi/', views.MultiView.as_view(), name='multi'),
+    path('multi2/', views.MultiView2.as_view(), name='multi2'),
 ]
 
 
