@@ -11,6 +11,8 @@ import glob
 
 from django.conf import settings
 
+#import json
+
 def pred(img_path):
     #model = tf.keras.applications.EfficientNetB0(weights='imagenet')
     #model.save('./test_model')
@@ -167,7 +169,15 @@ class Effi_Pred():
             #print(decode_predictions(y, top=1))
             #mbox.extend(decode_predictions(y, top=1))
 
-            class_names = ["bush", "obama", "tramp"]
+            with open(settings.STATIC_ROOT +'/label_list.txt', 'r', encoding='UTF-8') as f:
+                label_list = f.readlines()
+            dd = []
+            for ii in label_list:
+                dd.append(ii.rstrip('\n'))
+            class_names = dd
+            print(class_names)
+
+            #class_names = ["bush", "obama", "tramp"]
             pred_labels = np.argmax(y, axis=-1)
             print(pred_labels)  # [2 0 0 2 2 2 4 2 3 3]
             pred_label_names = [class_names[x] for x in pred_labels]
@@ -188,6 +198,7 @@ class Effi_Train():
     def imgs_load(self,filenames):
         X=[]
         Y=[]
+        L={}
         #filenames = glob.glob(base_path + '*.jpg')
     
         for filename in filenames:
@@ -195,12 +206,33 @@ class Effi_Train():
             img = img_to_array(load_img(filename, target_size=(224,224)))
             X.append(img)
             Y.append(os.path.basename(filename).split('_')[0])
+
+            L[os.path.basename(filename).split('_')[1]] = os.path.basename(filename).split('_')[0]
+
         X = np.array(X)
         print(X.shape)
         Y = np.array(Y)
         print(Y.shape)
-    
+        
+        self.label_list(L)
+
         return train_test_split(X, Y), np.unique(Y).size
+
+    def label_list(self,dicts):
+
+        print(dicts)
+
+        dicts_sorted = sorted(dicts.items(), key=lambda x:x[1])
+        print(dicts_sorted)
+
+        dd = []
+        for ii in dicts_sorted:
+            dd.append(ii[0])
+        dd = "\n".join(dd)
+        print(dd)
+
+        with open(settings.STATIC_ROOT +'/label_list.txt', 'w') as f:
+            f.writelines(dd)
 
     def effi_train(self):
         (X_train, X_test, y_train, y_test), n_classes = self.imgs_load(self.filenames)
