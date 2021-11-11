@@ -102,6 +102,7 @@ class MultiView(TemplateView):
 
 
 class EffiPredView(TemplateView):
+    print('----views.EffiPredView----')
 
     def __init__(self):
         print('------------init-----------')
@@ -163,8 +164,9 @@ class EffiPredView(TemplateView):
 
 
 class EffiTrainView(TemplateView):
-
+    print('----views.EffiTrainView----')
     def __init__(self):
+
         print('------------init-----------')
         self.params={'effidata': 'none',
                     'form': MultiForm(),

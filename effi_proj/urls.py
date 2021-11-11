@@ -6,7 +6,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
-
+print('----effi_proj.urls----')
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('effi_app/', include('effi_app.urls')),

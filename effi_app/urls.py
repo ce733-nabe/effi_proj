@@ -1,6 +1,7 @@
 from django.urls import path
 from . import views
 
+print('----effi_app.urls----')
 app_name = 'effi_app'
 urlpatterns = [
     path('index/', views.IndexView.as_view(), name='index'),
