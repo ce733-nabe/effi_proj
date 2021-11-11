@@ -117,6 +117,9 @@ class EffiPredView(TemplateView):
         print('------------post-----------')
         start = time.time()
 
+        username = self.request.user.username
+        print('username:{}'.format(username))
+
         if req.method == 'POST':
             form = MultiForm(req.POST, req.FILES)
             #pred = Pred()
@@ -136,7 +139,7 @@ class EffiPredView(TemplateView):
                 iiis = EfficientData.objects.all().order_by('-id')[:cnt]
                 for iii in iiis:
                     pimg_box2.append(settings.MEDIA_ROOT + '/' + str(iii.photo_image))
-                preds = Effi_Pred(filenames=pimg_box2, batch_size=20).effi_pred()
+                preds = Effi_Pred(filenames=pimg_box2, batch_size=20, username=username).effi_pred()
 
 
                 cnt2 = 0
@@ -175,6 +178,9 @@ class EffiTrainView(TemplateView):
         print('------------post-----------')
         start = time.time()
 
+        username = self.request.user.username
+        print('username:{}'.format(username))
+
         if req.method == 'POST':
             form = MultiForm(req.POST, req.FILES)
             #pred = Pred()
@@ -195,7 +201,7 @@ class EffiTrainView(TemplateView):
                 for iii in iiis:
                     pimg_box2.append(settings.MEDIA_ROOT + '/' + str(iii.photo_image))
                 #preds = Preds(filenames=pimg_box2, batch_size=20).preds()
-                score = Effi_Train(filenames=pimg_box2).effi_train()
+                score = Effi_Train(filenames=pimg_box2,username=username).effi_train()
 
 
                 #cnt2 = 0
@@ -217,6 +223,8 @@ class EffiTrainView(TemplateView):
         print("elapsed_time:{0}".format(elapsed_time) + "[sec]")
 
         return render(req, 'effi_app/effitrain.html', self.params)
+
+
 
     
     

@@ -125,13 +125,15 @@ class Preds():
 
 
 class Effi_Pred():
-    def __init__(self,filenames, batch_size):
+    def __init__(self,filenames, batch_size, username):
         print('Effi_Pred コンストラクタが呼び出されました！')
         self.imgs = self.imgs_load(filenames)
  
         self.batch_size = batch_size
         #self.model = tf.keras.applications.EfficientNetB0(weights='imagenet')
-        self.model = tf.keras.models.load_model(settings.STATIC_ROOT + '/my_model')
+
+        self.username = username
+        self.model = tf.keras.models.load_model(settings.STATIC_ROOT + '/' + self.username + '_my_model')
         
     def __del__(self):
         print ('Effi_Pred デストラクタが呼び出されました!')
@@ -169,7 +171,7 @@ class Effi_Pred():
             #print(decode_predictions(y, top=1))
             #mbox.extend(decode_predictions(y, top=1))
 
-            with open(settings.STATIC_ROOT +'/label_list.txt', 'r', encoding='UTF-8') as f:
+            with open(settings.STATIC_ROOT + '/' + self.username + '_label_list.txt', 'r', encoding='UTF-8') as f:
                 label_list = f.readlines()
             dd = []
             for ii in label_list:
@@ -188,9 +190,10 @@ class Effi_Pred():
 #Preds(img_path='./gazou_sample/',batch_size = 4).preds()
 
 class Effi_Train():
-    def __init__(self,filenames):
+    def __init__(self,filenames,username):
         print('Effi_train コンストラクタが呼び出されました！')
         self.filenames = filenames
+        self.username = username
 
     def __del__(self):
         print ('Effi_train デストラクタが呼び出されました!')
@@ -231,7 +234,7 @@ class Effi_Train():
         dd = "\n".join(dd)
         print(dd)
 
-        with open(settings.STATIC_ROOT +'/label_list.txt', 'w') as f:
+        with open(settings.STATIC_ROOT + '/' + self.username + '_label_list.txt', 'w') as f:
             f.writelines(dd)
 
     def effi_train(self):
@@ -254,10 +257,10 @@ class Effi_Train():
         # 学習
         model.compile(optimizer='SGD', loss='categorical_crossentropy', metrics=['accuracy'])
         model.fit(X_train_processed, y_train_categorical,epochs=10,batch_size=4) #epoch数とか諸々のものは一般のkerasと同様ここでオプション追加する
-        model.save(settings.STATIC_ROOT + '/my_model')
+        model.save(settings.STATIC_ROOT + '/' + self.username + '_my_model')
 
         #モデル評価
-        model = tf.keras.models.load_model(settings.STATIC_ROOT + '/my_model')
+        model = tf.keras.models.load_model(settings.STATIC_ROOT + '/' + self.username + '_my_model')
         score = model.evaluate(X_test_processed, y_test_categorical, verbose=0)
 
         print("loss:", score[0])
