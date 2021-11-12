@@ -1,8 +1,9 @@
 {% extends 'effi_app/base.html' %}
 
 {% block content %}
-<a href="{% url 'account_logout' %}">ログアウト</a>
-<h6><a href="{% url 'effi_app:index' %}">インデックス</a></h6>
+<h3>単一処理</h3>
+<!--<a href="{% url 'account_logout' %}">ログアウト</a>
+<h6><a href="{% url 'effi_app:index' %}">インデックス</a></h6>-->
 
 <table>
 <form action="{% url 'effi_app:single' %}" method="POST" enctype="multipart/form-data">
