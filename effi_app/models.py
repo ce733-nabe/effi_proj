@@ -9,4 +9,10 @@ class EfficientData(models.Model):
     pred_result = models.CharField(verbose_name='推論結果',max_length=200)
     
     def __str__(self):
-        return self.photo_image
+        return str(self.pub_date)
+
+    #def __str__(self):
+    #    return str(self.photo_image)
+
+    #def __str__(self):
+    #    return str(self.pub_date)
