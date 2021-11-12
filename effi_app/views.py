@@ -6,11 +6,16 @@ from effi_app.main import pred, Pred, Preds, Effi_Pred, Effi_Train
 from .models import EfficientData
 from django.conf import settings
 import time
+from django.contrib.auth.mixins import LoginRequiredMixin
 
-class IndexView(TemplateView):
+class IndexView(LoginRequiredMixin,TemplateView):
+    #redirect_field_name = 'redirect_to'
     template_name = 'effi_app/index.html'
+    login_url = '/account/login/'
 
-class SingleView(TemplateView):
+class SingleView(LoginRequiredMixin,TemplateView):
+    #redirect_field_name = 'redirect_to'
+    login_url = '/account/login/'
 
     def __init__(self):
         self.params={'effidata': 'none',
@@ -43,7 +48,8 @@ class SingleView(TemplateView):
         return render(req, 'effi_app/single.html', self.params)
 
 
-class MultiView(TemplateView):
+class MultiView(LoginRequiredMixin,TemplateView):
+    login_url = '/account/login/'
 
     def __init__(self):
         print('------------init-----------')
@@ -101,7 +107,9 @@ class MultiView(TemplateView):
         return render(req, 'effi_app/multi.html', self.params)
 
 
-class EffiPredView(TemplateView):
+class EffiPredView(LoginRequiredMixin,TemplateView):
+    login_url = '/account/login/'
+
     print('----views.EffiPredView----')
 
     def __init__(self):
@@ -163,7 +171,9 @@ class EffiPredView(TemplateView):
         return render(req, 'effi_app/effipred.html', self.params)
 
 
-class EffiTrainView(TemplateView):
+class EffiTrainView(LoginRequiredMixin,TemplateView):
+    login_url = '/account/login/'
+    
     print('----views.EffiTrainView----')
     def __init__(self):
 
