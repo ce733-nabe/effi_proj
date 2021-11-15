@@ -25,12 +25,12 @@
         <div class="header item">
             AI-WEBアプリ
         </div>
-
+        <a class="item" href="{% url 'base:index' %}">home</a>
         <a class="item" href="{% url 'effi_app:index' %}">EfficientNet</a>
 
         {% block login_out %}
         {% endblock %}
-        
+
     </div>
     
     <div class="ui container" style="min-height:100vh;">
