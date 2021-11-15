@@ -14,6 +14,7 @@ urlpatterns = [
     path('account/', include('allauth.urls')),
 ]
 
-if settings.DEBUG:
+#if settings.DEBUG:
     #urlpatterns += staticfiles_urlpatterns()
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    #urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
