@@ -1,15 +1,26 @@
-{% extends 'effi_app/base.html' %}
+{% extends 'base/base.html' %}
+
+{% block login_out %}
+    <div class="right menu">
+        <a class="item" href="{% url 'account_logout' %}">ログアウト</a>
+    </div>
+{% endblock %}
 
 {% block content %}
-<h3>複数処理</h3>
+<!--<h3>複数処理</h3>-->
 <!--<a href="{% url 'account_logout' %}">ログアウト</a>
 <h6><a href="{% url 'effi_app:index' %}">インデックス</a></h6>-->
+<div class="ui segment">
+    <div class="header"><h3>複数処理</h3></div>
+        <p>・EfficientNet B0モデルで画像判別できます</p>
+        <p>・画像を複数枚選択し推論してください</p>
+</div>
 
 <table>
 <form action="{% url 'effi_app:multi' %}" method="POST" enctype="multipart/form-data">
    {% csrf_token %}
    {{ form }}
-   <tr><td></td><td><input type="submit" class="btn btn-primary btn-sm" value="推論開始" /></td></tr>
+   <tr><td></td><td><input type="submit" class="ui blue inverted button" value="推論開始" /></td></tr>
 </form>
 </table>
 

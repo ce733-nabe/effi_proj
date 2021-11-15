@@ -7,6 +7,5 @@ local_settings.py
 __pycache__/
 db-volumes/
 settings.py
-media
-static
+
 

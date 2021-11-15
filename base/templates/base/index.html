@@ -1,0 +1,15 @@
+{% extends 'base/base.html' %}
+
+{% block login_out %}
+    <div class="right menu">
+        <a class="item" href="{% url 'account_login' %}">ログイン</a>
+    </div>
+{% endblock %}
+
+{% block content %}
+    <div class="ui segment">
+        <div class="header"><h3>AI-WEBアプリでできること</h3></div>
+            <p>・各種画像判定ができる</p>
+            <p>・今後ラインナップを追加予定</p>
+    </div>
+{% endblock %}

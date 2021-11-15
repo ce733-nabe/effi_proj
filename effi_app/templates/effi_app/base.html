@@ -1,3 +1,4 @@
+{% comment %}
 {% load static %}
 <!DOCTYPE html>
 <html lang="ja">
@@ -39,3 +40,64 @@
 </body>
 
 </html>
+{% endcomment %}
+
+{% load static %}
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="content-language" content="ja">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    {% block meta_tag %}{% endblock %}
+
+    <!--css-->
+    <link rel="stylesheet" type="text/css" href="{% static 'effi_app/css/style.css' %}">
+    <!--bootstrap-->
+    <link rel="stylesheet" type="text/css" href="{% static 'effi_app/css/bootstrap.min.css' %}">
+    <!--semantic-->
+    <link href="{% static 'effi_app/css/semantic.min.css' %}" rel="stylesheet" >
+    {% block css %}{% endblock %}
+
+    <title>
+        {% block title %}AI-WEBアプリ{% endblock %}
+    </title>
+
+</head>
+
+<body>
+    <div class="ui stackable inverted menu">
+        <div class="header item">
+            AI-WEBアプリ
+        </div>
+
+        <a class="item" href="{% url 'effi_app:index' %}">INDEX</a>
+
+        <div class="right menu">
+            <a class="item" href="{% url 'account_logout' %}">ログアウト</a>
+        </div>
+    </div>
+    
+    <div class="ui container" style="min-height:100vh;">
+        {% block content %}
+        {% endblock %}
+    </div>
+
+    <div class="ui inverted stackable footer segment">
+        <div class="ui container center aligned">
+            <div class="ui horizontal inverted small divided link list">
+                <a class="item">© 2021 AI-WEBアプリ</a>
+                <a class="item">利用規約</a>
+                <a class="item">プライバシーポリシー</a>
+            </div>
+        </div>
+    </div>
+
+    <!--bootstrap-->
+    <script src="{% static 'effi_app/js/bootstrap.bundle.min.js' %}"></script>
+    
+    <!--semantic-->
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script type="text/javascript" src="{% static 'effi_app/js/semantic.min.js' %}"></script>
+    {% block js %}{% endblock %}
+    
+</body>

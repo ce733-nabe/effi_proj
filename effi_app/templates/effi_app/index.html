@@ -1,4 +1,10 @@
-{% extends 'effi_app/base.html' %}
+{% extends 'base/base.html' %}
+
+{% block login_out %}
+    <div class="right menu">
+        <a class="item" href="{% url 'account_logout' %}">ログアウト</a>
+    </div>
+{% endblock %}
 
 {% block content %}
 <!--<a href="{% url 'account_logout' %}">ログアウト</a>-->

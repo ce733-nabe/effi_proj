@@ -9,6 +9,7 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 print('----effi_proj.urls----')
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', include('base.urls')),
     path('effi_app/', include('effi_app.urls')),
     path('account/', include('allauth.urls')),
 ]
